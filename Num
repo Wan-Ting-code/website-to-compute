@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chinese Quest</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ffecd2, #fcb69f);
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        color: #ff5722;
+    }
+    .screen {
+        display: none;
+        padding: 20px;
+    }
+    .active {
+        display: block;
+    }
+    button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        border-radius: 8px;
+        background: #ff5722;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    button:hover {
+        background: #e64a19;
+    }
+    #monster {
+        font-size: 50px;
+    }
+</style>
+</head>
+<body>
+
+<div id="startScreen" class="screen active">
+    <h1>Chinese Quest 🀄</h1>
+    <p>Learn Chinese and earn gems!</p>
+    <button onclick="startGame()">Play</button>
+</div>
+
+<div id="gameScreen" class="screen">
+    <h2>Gems: <span id="gems">0</span></h2>
+    <p id="wordDisplay"></p>
+    <input type="text" id="answer" placeholder="Type meaning...">
+    <button onclick="checkAnswer()">Submit</button>
+    <p id="feedback"></p>
+    <hr>
+    <button onclick="offerHomework()">Homework 📚</button>
+    <button onclick="battleMonster()">Battle 🐉</button>
+    <div id="monster"></div>
+</div>
+
+<script>
+let gems = 0;
+let words = [
+    {hanzi: "你好", pinyin: "nǐ hǎo", meaning: "hello"},
+    {hanzi: "谢谢", pinyin: "xiè xie", meaning: "thank you"},
+    {hanzi: "再见", pinyin: "zài jiàn", meaning: "goodbye"},
+    {hanzi: "中国", pinyin: "zhōng guó", meaning: "china"}
+];
+let currentWord;
+
+function startGame() {
+    document.getElementById("startScreen").classList.remove("active");
+    document.getElementById("gameScreen").classList.add("active");
+    nextWord();
+}
+
+function nextWord() {
+    currentWord = words[Math.floor(Math.random() * words.length)];
+    document.getElementById("wordDisplay").innerHTML =
+        `<b>${currentWord.hanzi}</b> (${currentWord.pinyin})`;
+    document.getElementById("answer").value = "";
+    document.getElementById("feedback").innerText = "";
+}
+
+function checkAnswer() {
+    let userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+    if (userAnswer === currentWord.meaning) {
+        gems += 5;
+        document.getElementById("gems").innerText = gems;
+        document.getElementById("feedback").innerText = "✅ Correct!";
+    } else {
+        document.getElementById("feedback").innerText = "❌ Try again!";
+    }
+    nextWord();
+}
+
+function offerHomework() {
+    if (confirm("Homework available! Accept for +10 gems?")) {
+        gems += 10;
+    } else {
+        gems -= 2;
+    }
+    document.getElementById("gems").innerText = gems;
+}
+
+function battleMonster() {
+    let monsterEmoji = ["🐉", "👹", "🦖", "👻"];
+    document.getElementById("monster").innerText =
+        monsterEmoji[Math.floor(Math.random() * monsterEmoji.length)];
+    let win = Math.random() > 0.5;
+    if (win) {
+        gems += 15;
+        alert("You won! +15 gems");
+    } else {
+        gems -= 5;
+        alert("You lost! -5 gems");
+    }
+    document.getElementById("gems").innerText = gems;
+}
+</script>
+
+</body>
+</html>
